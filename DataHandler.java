@@ -1,13 +1,11 @@
 import java.io.*;
 
 import com.google.gson.Gson;
-import json.Artist.Artist;
-import json.Artist.Bio;
-import json.Artist.SimilarArtist;
-import json.Artist.Stats;
+import json.Artist.*;
+import json.Track.*;
 
 public class DataHandler {
-    public static void updateLastAPICallCache(Artist artist, Stats stats, SimilarArtist similarArtist, Bio bio){
+    public static void  updateLastAPICallCache(Artist artist, Stats stats, SimilarArtist similarArtist, Bio bio, TopArtists topArtists, Track track, TopTags topTags, Wiki wiki, TopSongs topSongs){
 
 //        File last_api_call_cache = new File("last_api_call_cache.json");
 //        if(!last_api_call_cache.exists()){
@@ -16,10 +14,17 @@ public class DataHandler {
         artist.setStats(stats);
         artist.setSimilarArtist(similarArtist);
         artist.setBio(bio);
+        artist.setTopArtists(topArtists);
+
+        track.setTopTags(topTags);
+        track.setWiki(wiki);
+        track.setTopSongs(topSongs);
+
         try{
             Gson gson = new Gson();
             FileWriter writer = new FileWriter("last_api_call_cache.json");
             gson.toJson(artist, writer);
+            gson.toJson(track , writer);
             writer.close();
 
         }catch (IOException e){

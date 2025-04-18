@@ -5,6 +5,7 @@ public class Artist {
     private Stats stats;
     private SimilarArtist similarArtist;
     private Bio bio;
+    private TopArtists topArtists;
 
     public String getName(){
         return name;
@@ -13,6 +14,15 @@ public class Artist {
           this.name = name;
 
     }
+
+    public void setTopArtists(TopArtists topArtists) {
+        this.topArtists = topArtists;
+    }
+
+    public TopArtists getTopArtists() {
+        return topArtists;
+    }
+
     public Stats getStats(){
         return stats;
     }

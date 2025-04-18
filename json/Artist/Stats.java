@@ -13,9 +13,7 @@ public class Stats {
         this.playCount = playCount;
     }
 
-    public void setTags(String tags){
-        this.tags = tags;
-    }
+
     public String getNumberOfListeners(){
         return numberOfListeners;
     }

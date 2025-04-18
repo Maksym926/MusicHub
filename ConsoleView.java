@@ -58,23 +58,25 @@ public class ConsoleView implements IVeiw {
                 boolean completed = false;
 
                 while (!completed){
-                    System.out.println("Enter artist's name");
+                    System.out.println("Enter artist's name or Q if you want to leave this option");
+
                     String artistName = getUserInput();
-                    System.out.println("Enter a song name");
-                    String songName = getUserInput();
-                    System.out.println("Enter keyword SongBasic, if you want to get basic artist's song info");
-                    System.out.println("Enter keyword SongExpanded, if you want to get expanded artist's song info");
+                    if(!artistName.equalsIgnoreCase("Q")){
+                        System.out.println("Enter a song name");
+                        String songName = getUserInput();
+                        System.out.println("Enter keyword SongBasic, if you want to get basic artist's song info");
+                        System.out.println("Enter keyword SongExpanded, if you want to get expanded artist's song info");
 
-                    String input = getUserInput();
+                        String input = getUserInput();
 
-                    switch (input){
-                        case "SongBasic", "SongExpanded":
-                            presenter.getInfoByOption(artistName, songName, input);
-                            break;
-                        case "Q":
-                            completed = true;
-                            break;
+
+                        presenter.getInfoByOption(artistName, songName, input);
+
+                    }else{
+                        completed = true;
                     }
+
+
                 }
             }
             else if(userChoice.equals("topSongs")){

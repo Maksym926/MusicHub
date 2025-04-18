@@ -35,7 +35,7 @@ public class Presenter {
 
 
     public void updateJsonFile(){
-        DataHandler.updateLastAPICallCache(model.newArtist, model.stats, model.similarArtist, model.bio);
+        DataHandler.updateLastAPICallCache(model.newArtist, model.stats, model.similarArtist, model.bio, model.topArtists, model.track, model.tags, model.wiki, model.topSongs);
     }
 
 

@@ -1,7 +1,5 @@
-import json.Artist.Artist;
-import json.Artist.Bio;
-import json.Artist.SimilarArtist;
-import json.Artist.Stats;
+import json.Artist.*;
+import json.Track.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,6 +19,12 @@ public class Model {
     Artist newArtist = new Artist();
     SimilarArtist similarArtist = new SimilarArtist();
     Bio bio = new Bio();
+    TopArtists topArtists = new TopArtists();
+
+    Track track = new Track();
+    TopTags tags = new TopTags();
+    Wiki wiki = new Wiki();
+    TopSongs topSongs = new TopSongs();
 
     public String findInfoByOption(String input, String option){
 
@@ -28,10 +32,11 @@ public class Model {
             String urlString = "";
             switch (option) {
                 case "artist":
+                        newArtist.setName(input);
                         urlString ="http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist="
                         + newArtist.getName().replace(" ", "+")
                         + "&api_key=" + API_KEY + "&format=json";
-                        newArtist.setName(input);
+
                         break;
 
                 case "topSongs":
@@ -53,7 +58,8 @@ public class Model {
         return "";
     }
     public String findInfoByOption(String artistName, String songName, String option){
-        newArtist.setName(artistName);
+        track.setArtistName(artistName);
+        track.setTrackName(songName);
 
         try {
             String urlString;
@@ -100,6 +106,7 @@ public class Model {
 
         // Parse the JSON response using JSONObject
         JSONObject jsonResponse = new JSONObject(response.toString());
+        System.out.println(jsonResponse);
 
             if(option.equals("ArtistBasic")) {
                 JSONObject artist = jsonResponse.getJSONObject("artist");
@@ -118,10 +125,10 @@ public class Model {
                     similarArtistName.add(similar.getString("name"));
                 }
                 if (similarArtistName.isEmpty()) {
-                    return "similar artists have not been found";
+                    similarArtistName.add("similar artists have not been found");
                 }
 
-                updateObject(listeners, playCount, similarArtistName.get(0));
+                updateArtistObject(listeners, playCount, similarArtistName.get(0));
                 return "Artist's name: " + newArtist.getName() + "\n" + "Number of listeners: " + listeners + "\n" + "Play count: " + playCount + "\n" + "Similar artist: " + similarArtistName.get(0);
             }
             else if (option.equals("ArtistExpanded")){
@@ -143,44 +150,37 @@ public class Model {
                     similarArtistName.add(similar.getString("name"));
                 }
                 if(similarArtistName.isEmpty()){
-                    return "similar artists have not been found";
+                    similarArtistName.add("similar artists have not been found");
                 }
 
                 String artistBio = artist.getJSONObject("bio").getString("summary");
                 String publishedDate = artist.getJSONObject("bio").getString("published");
-
-
-//                JSONArray tagsArr = jsonResponse
-//                        .getJSONObject("toptags")
-//                        .getJSONArray("tag");
-//
-//
-//                for (int i = 0; i < tagsArr.length(); i++) {
-//                    JSONObject tag = tagsArr.getJSONObject(i);
-//                    tags.add(tag.getString("name"));
-//
-//                }
-//
-//                if(tags.isEmpty()){
-//                    return "similar artists have not been found";
-//                }
-                updateObject(listeners, playCount ,String.join(", ", similarArtistName), artistBio, publishedDate);
+                updateArtistObject(listeners, playCount ,String.join(", ", similarArtistName), artistBio, publishedDate);
                 return  "Artist's name: " + newArtist.getName() + "\n" + "Number of listeners: " + listeners + "\n" + "Play count: " + playCount + "\n" + "Similar artists: " + String.join(", ", similarArtistName) + "\n" + "Bio: " + artistBio + "\n" + "Date: " + publishedDate;
 
             }
             else if(option.equals("SongBasic")){
+
                 ArrayList<String> tagsList = new ArrayList<>();
                 JSONObject track = jsonResponse.getJSONObject("track");
+                String trackName = track.getString("name");
                 String songDuration = track.getString("duration");
                 String listeners = track.getString("listeners");
                 String playCount = track.getString("playcount");
                 JSONArray tags = track.getJSONObject("toptags").getJSONArray("tag");
+
                 for (int i = 0; i < tags.length(); i++){
                     JSONObject tag = tags.getJSONObject(i);
                     tagsList.add(tag.getString("name"));
 
                 }
-                return"Artist's name" + newArtist.getName() + "\n" + "Number of listeners: " + listeners + "\n" + "Play count: " + playCount + "\n" + "Song duration: " + songDuration + "\n" + "Tag: " + tagsList.get(0) + "\n";
+                if(tagsList.isEmpty()){
+                    tagsList.add("No tags have been found");
+                }
+
+
+                updateTrackObject(songDuration, listeners, playCount, tagsList.get(0));
+                return"Artist's name: " + newArtist.getName() + "\n" + "Track name: " + trackName + "\n" + "Number of listeners: " + listeners + "\n" + "Play count: " + playCount + "\n" + "Song duration: " + songDuration + "\n" + "Tag: " + tagsList.get(0) + "\n";
 
             }
             else if(option.equals("SongExpanded")){
@@ -197,76 +197,78 @@ public class Model {
                     tagsList.add(tag.getString("name"));
                 }
                 String summary = track.getJSONObject("wiki").getString("summary");
-                return"Artist's name " + newArtist.getName() + "\n" + "Track name: " + trackName + "\n" + "Number of listeners: " + listeners + "\n" + "Play count: " + playCount + "\n" + "Song duration: " + songDuration + "\n" + "Tag: " + String.join(", ", tagsList) + "\n" + "Summary: " + summary;
+                String publishedDate = track.getJSONObject("wiki").getString("published");
+                if(tags.isEmpty()){
+                    tagsList.add("No tags have been found");
+                }
+                updateTrackObject(songDuration, listeners, playCount, String.join(", ", tagsList), summary ,publishedDate);
+                return"Artist's name " + newArtist.getName() + "\n" + "Track name: " + trackName + "\n" + "Number of listeners: " + listeners + "\n" + "Play count: " + playCount + "\n" + "Song duration: " + songDuration + "\n" + "Tag: " + String.join(", ", tagsList) + "\n" + "Summary: " + summary + "\n" + "Publish date: " + publishedDate;
 
             }
             if(option.equals("topArtists")){
-                ArrayList<String> topArtists = new ArrayList<>();
+                ArrayList<String> topArtistsList = new ArrayList<>();
 
                 // Parse the JSON response using JSONObject
                 JSONArray artists = jsonResponse.getJSONObject("topartists").getJSONArray("artist");
                 for(int i = 0; i < artists.length(); i++){
                     JSONObject artist = artists.getJSONObject(i);
-                    topArtists.add(artist.getString("name"));
+                    topArtistsList.add(artist.getString("name"));
                 }
-                return "The most popular artists: " + String.join("\n", topArtists);
+                if(topArtistsList.isEmpty()){
+                    topArtistsList.add("The top artists have not been found");
+                }
+                updateArtistObject(String.join(", ", topArtistsList));
+                return "The most popular artists: " + String.join("\n", topArtistsList);
             }
             if(option.equals("topSongs")){
-                ArrayList<String> topSongs = new ArrayList<>();
+                ArrayList<String> topSongsList = new ArrayList<>();
 
                 // Parse the JSON response using JSONObject
                 JSONArray songs = jsonResponse.getJSONObject("tracks").getJSONArray("track");
                 for(int i = 0; i < songs.length(); i++){
                     JSONObject artist = songs.getJSONObject(i);
-                    topSongs.add(artist.getString("name"));
+                    topSongsList.add(artist.getString("name"));
                 }
-                return "The most popular songs: " + String.join("\n", topSongs);
+                if(topSongsList.isEmpty()){
+                    topSongsList.add("The top songs have not been found");
+                }
+                updateTrackObject(String.join(", ", topSongsList));
+                return "The most popular songs: " + String.join("\n", topSongsList);
             }
-
-
-
-
-
-
-
-
-
-
-
-
         return "";  // Return the artist's bio or any other data you'd like
     }
-    private void updateObject(String listener, String playCount, String similarArtistName){
+    private void updateArtistObject(String newTopArtists){
+        topArtists.setTopArtists(newTopArtists);
+    }
+    private void updateArtistObject(String listener, String playCount, String similarArtistName){
         stats.setNumberOfListeners(listener);
         stats.setPlayCount(playCount);
         similarArtist.setSimilarArtistName(similarArtistName);
-        //        if(option.equals("1")){
-//           stats.setNumberOfListeners(newData);
-//
-//        }
-//        if(option.equals("2")){
-//            stats.setPlayCount(newData);
-//        }
-//        if(option.equals("3")){
-//            similarArtist.setSimilarArtistName(newData);
-//        }
-//        if(option.equals("4")){
-//            bio.setSummary(newData);
-//        }
-//        if(option.equals("5")){
-//            bio.setPublisedDate(newData);
-//        }
-//        if(option.equals("6")){
-//            stats.setTags(newData);
-//        }
-
     }
-    private void updateObject(String listener, String playCount, String similarArtistName, String artistBio, String publishedDate){
+    private void updateArtistObject(String listener, String playCount, String similarArtistName, String artistBio, String publishedDate){
         stats.setNumberOfListeners(listener);
         stats.setPlayCount(playCount);
         similarArtist.setSimilarArtistName(similarArtistName);
         bio.setSummary(artistBio);
         bio.setPublisedDate(publishedDate);
+    }
+    private void updateTrackObject(String newTopSongs){
+        topSongs.setTopSongs(newTopSongs);
+    }
+    private void updateTrackObject( String trackDuration, String listener, String playCount, String tag){
+        track.setDuration(trackDuration);
+        track.setNumberOfListeners(listener);
+        track.setPlayCount(playCount);
+        tags.setTags(tag);
+    }
+    private void updateTrackObject(String trackDuration, String listener, String playCount, String newTags , String summary, String publishedDate){
+        track.setDuration(trackDuration);
+        track.setNumberOfListeners(listener);
+        track.setPlayCount(playCount);
+        tags.setTags(newTags);
+        wiki.setSummary(summary);
+        wiki.setPublisedDate(publishedDate);
+
     }
 
 
