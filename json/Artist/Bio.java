@@ -3,15 +3,19 @@ package json;
 public class Bio {
     private String publisedDate;
     private String summary;
-    public Bio (String publisedDate, String summary){
-        this.publisedDate = publisedDate;
-        this.summary = summary;
-    }
+
     public String getPublisedDate(){
         return publisedDate;
+    }
+    public void setPublisedDate(String publisedDate){
+        this.publisedDate = publisedDate;
     }
     public String getSummary(){
         return summary;
     }
+    public void setSummary(String summary){
+        this.summary = summary;
+    }
+
 
 }
