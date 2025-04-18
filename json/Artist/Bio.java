@@ -1,4 +1,4 @@
-package json;
+package json.Artist;
 
 public class Bio {
     private String publisedDate;

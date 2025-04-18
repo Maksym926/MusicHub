@@ -21,8 +21,21 @@ public class Presenter {
         }
 
     }
+    public void getInfoByOption(String artistName, String songName, String option){
+        if(model.isApiAvailable()){
+            String result = model.findInfoByOption(artistName, songName, option);
+            view.updateConsole(result);
+        }else{
+            if(view.showInternetErrorMsg()){
+                DataHandler.readCashedData();
+            }
+        }
+
+    }
+
+
     public void updateJsonFile(){
-        DataHandler.updateLastAPICallCache(model.stats);
+        DataHandler.updateLastAPICallCache(model.newArtist, model.stats, model.similarArtist, model.bio);
     }
 
 

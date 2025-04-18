@@ -1,4 +1,4 @@
-package json;
+package json.Artist;
 
 public class Artist {
     private String name;
