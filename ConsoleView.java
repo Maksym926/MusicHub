@@ -5,7 +5,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.Scanner;
-
+/**
+ * Interface for Console View operations.
+ */
 interface IView {
     void setPresenter(Presenter presenter);
     void displayMenu();
@@ -13,26 +15,33 @@ interface IView {
     boolean showInternetErrorMsg(String errorMessage);
     void showCachedData(Artist info);
 }
-
+/**
+ * ConsoleView class handles the user interaction part of the application
+ */
 public class ConsoleView implements IView {
+    //create presenter object
     private Presenter presenter;
+    // ANSI color codes for text styling
     public static final String RESET = "\u001B[0m";
     public static final String YELLOW = "\u001B[33m";
     public static final String BLUE = "\u001B[34m";
     public static final String RED = "\u001B[31m";
     public static final String GREEN = "\u001B[32m";
 
+    // Color settings for various parts of the UI
     public static String headingsColor = RESET;
     public static String optionColor = RESET;
     public static String outputColor = RESET;
     public static String cachedDataColor = RESET;
 
-
+    // set presenter, to retrieve presenter's methods
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
     }
 
-
+    /**
+     * Displays the main menu and handles user navigation through options.
+     */
     public void displayMenu() {
         boolean isEnd = false;
         while (!isEnd) {
@@ -52,7 +61,9 @@ public class ConsoleView implements IView {
             }
         }
     }
-
+    /**
+     * Displays the main menu options.
+     */
     private void displayMainMenu() {
         System.out.println(headingsColor + "+----------------------------+");
         System.out.println("|         MUSIC HUB          |");
@@ -64,7 +75,9 @@ public class ConsoleView implements IView {
         System.out.println("Enter 'S' to open settings.");
         System.out.println("Enter 'Q' to quit MusicHub." + RESET);
     }
-
+    /**
+     * Handles user input related to artist information retrieval.
+     */
     private void handleArtistOption() {
         System.out.println(optionColor + "Enter the artist's name:" + RESET);
         String artistName = getUserInput();
@@ -81,7 +94,9 @@ public class ConsoleView implements IView {
             }
         }
     }
-
+    /**
+     * Handles user input related to song information retrieval.
+     */
     private void handleSongOption() {
         boolean completed = false;
 
@@ -99,13 +114,17 @@ public class ConsoleView implements IView {
             }
         }
     }
-
+    /**
+     * Handles user input related to top artists or songs for a specific country.
+     */
     private void handleTopOption(String type) {
         System.out.println(optionColor + "Enter the country:" + RESET);
         String country = getUserInput();
         presenter.getInfoByOption(country, type);
     }
-
+    /**
+     * Manages the color settings menu.
+     */
     private void handleSettings() {
         boolean backToMenu = false;
         while (!backToMenu) {
@@ -122,7 +141,9 @@ public class ConsoleView implements IView {
             }
         }
     }
-
+    /**
+     * Allows the user to set the color for a specific section.
+     */
     private void customizeColor(String section) {
         displayColorOptions();
         String colorChoice = getUserInput();
@@ -143,7 +164,9 @@ public class ConsoleView implements IView {
         }
         setColorInConfig(section, color);
     }
-
+    /**
+     * Resets all colors back to default (no color).
+     */
     private void resetColors() {
         headingsColor = optionColor = outputColor = cachedDataColor = RESET;
         setColorInConfig("headings", RESET);
@@ -151,7 +174,9 @@ public class ConsoleView implements IView {
         setColorInConfig("outputs", RESET);
         setColorInConfig("cachedData", RESET);
     }
-
+    /**
+     * Displays the color settings menu.
+     */
     private void displayColorSettings() {
         System.out.println(optionColor + "\u2554\u2550 Color Settings \u2557");
         System.out.println("1. Headings Color");
@@ -161,7 +186,9 @@ public class ConsoleView implements IView {
         System.out.println("5. Reset All Colors");
         System.out.println("6. Back to Menu" + RESET);
     }
-
+    /**
+     * Displays the color options available to the user.
+     */
     private void displayColorOptions() {
         System.out.println("Select a Color:");
         System.out.println("1." + RED + " Red" + RESET);
@@ -171,19 +198,25 @@ public class ConsoleView implements IView {
         System.out.println("5. Default" + RESET);
     }
 
-    @Override
+    /**
+     * Shows an internet error message and prompts for retry.
+     */
     public boolean showInternetErrorMsg(String message) {
         System.out.println(message);
         String input = getUserInput();
         return input.equalsIgnoreCase("Yes");
     }
 
-    @Override
+    /**
+     * Updates the console with the given data.
+     */
     public void updateConsole(String data) {
         System.out.println(outputColor + data + RESET);
     }
 
-
+    /**
+     * Displays cached artist and song information in the console.
+     */
     public void showCachedData(Artist info) {
         System.out.println(cachedDataColor + "===========================" + RESET);
         System.out.println(cachedDataColor + "  Artist Information" + RESET);
@@ -212,12 +245,16 @@ public class ConsoleView implements IView {
         System.out.println("Top Songs: " + info.getTrack().getTopSongs());
         System.out.println("Published Date: " + info.getTrack().getWiki().getPublisedDate());
     }
-
+    /**
+     * Reads a single line of user input.
+     */
     private String getUserInput() {
         Scanner sc = new Scanner(System.in);
         return sc.nextLine();
     }
-
+    /**
+     * Saves a color setting into the config properties file.
+     */
     private void setColorInConfig(String key, String value) {
         Properties properties = new Properties();
         try (FileInputStream fis = new FileInputStream("config.properties")) {
@@ -234,7 +271,9 @@ public class ConsoleView implements IView {
             System.err.println("Error saving properties file: " + e.getMessage());
         }
     }
-
+    /**
+     * Loads previously saved color settings from the config file.
+     */
     public void importColorsFromFile() {
         Properties properties = new Properties();
         try (FileInputStream fis = new FileInputStream("config.properties")) {
