@@ -14,7 +14,7 @@ public class Presenter {
         }else{
             if(view.showInternetErrorMsg("You were disconnected from the internet. To retrieve the data from your last API call, enter 'yes' or click 'no' to exit MusicHub" )){
                 try{
-                    view.showCashedData(DataHandler.readCashedData());
+                    view.showCachedData(DataHandler.readCashedData());
                 }catch (IOException e){
                     e.getMessage();
                 }
@@ -29,7 +29,7 @@ public class Presenter {
         }else{
             if(view.showInternetErrorMsg("You were disconnected from the internet. To retrieve the data from your last API call, enter 'yes' or click 'no' if you want to come back to the main menu" )){
                 try{
-                    view.showCashedData(DataHandler.readCashedData());
+                    view.showCachedData(DataHandler.readCashedData());
                 }catch (IOException e){
                     e.getMessage();
                 }
@@ -44,7 +44,7 @@ public class Presenter {
         }else{
             if(view.showInternetErrorMsg("You were disconnected from the internet. To retrieve the data from your last API call, enter 'yes' or click 'no' if you want to come back to the main menu" )){
                 try{
-                    view.showCashedData(DataHandler.readCashedData());
+                    view.showCachedData(DataHandler.readCashedData());
                 }catch (IOException e){
                     e.getMessage();
                 }

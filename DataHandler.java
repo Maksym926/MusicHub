@@ -32,16 +32,10 @@ public class DataHandler {
 
     }
     public static Artist readCashedData() throws IOException{
-
             Gson gson = new Gson();
             FileReader reader = new FileReader("last_api_call_cache.json");
-
             Artist info = gson.fromJson(reader, Artist.class);
-
             return info;
-
-
-
     }
 
 

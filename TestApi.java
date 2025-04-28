@@ -15,12 +15,51 @@ public class TestApi {
     private static final String API_KEY = "b129759fc85be1b4eca753741e115b2c";  // Replace with your Last.fm API key
 
     public static void main(String[] args) {
-        String artistName = "Queen";  // Replace with the artist you're interested in
+        String urlString = "https://api.apileague.com/convert-image-to-ascii-txt?url=https://pbs.twimg.com/profile_images/1484668108539416580/dTvoAd3F_400x400.jpg&width=30&height=30";
+        String apiKey = "aad418d189a7441eb7e96030d747a275";
+
         try {
-            // Retrieve artist information
-            String artistInfo = getArtistInfo(artistName);
-            System.out.println("Artist Info: " + artistInfo);
-        } catch (Exception e) {
+            URL url = new URL(urlString);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("x-api-key", apiKey);
+
+            int responseCode = connection.getResponseCode();
+            System.out.println("Response Code: " + responseCode);
+
+            if (responseCode == HttpURLConnection.HTTP_OK) { // success
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                // Print result
+                // Now, process the JSON response manually
+                String json = response.toString();
+                System.out.println(json);
+                JSONObject obj = new JSONObject(json);
+                String asciiArt = obj.getString("ascii_art");
+
+                // Now fix newlines
+                asciiArt = asciiArt.replace("\\n", ""); // remove fake newlines
+                asciiArt = asciiArt.replace("\\\"", "\""); // optional
+
+                // Split into lines 30 characters wide
+                int width = 30;
+                for (int i = 0; i < asciiArt.length(); i += width) {
+                    int endIdx = Math.min(i + width, asciiArt.length());
+                    System.out.println(asciiArt.substring(i, endIdx));
+                }
+
+            } else {
+                System.out.println("GET request not worked");
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
