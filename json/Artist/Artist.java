@@ -1,11 +1,14 @@
 package json.Artist;
 
+import json.Track.Track;
+
 public class Artist {
-    private String name;
-    private Stats stats;
+    private String name = "";
+    private Stats stats ;
     private SimilarArtist similarArtist;
     private Bio bio;
     private TopArtists topArtists;
+    private Track track;
 
     public String getName(){
         return name;
@@ -19,8 +22,8 @@ public class Artist {
         this.topArtists = topArtists;
     }
 
-    public TopArtists getTopArtists() {
-        return topArtists;
+    public String getTopArtists() {
+        return topArtists.getTopArtists();
     }
 
     public Stats getStats(){
@@ -40,6 +43,13 @@ public class Artist {
     }
     public void setBio(Bio bio){
         this.bio = bio;
+    }
+
+    public void setTrack(Track track){
+        this.track = track;
+    }
+    public Track getTrack(){
+        return track;
     }
 
 }

@@ -1,9 +1,9 @@
 package json.Artist;
 
 public class Stats {
-    String numberOfListeners;
-    String playCount;
-    String tags;
+    String numberOfListeners = "";
+    String playCount = "";
+    String tags = "";
 
     public void setNumberOfListeners(String numberOfListeners){
         this.numberOfListeners = numberOfListeners;

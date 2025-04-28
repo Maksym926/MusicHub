@@ -7,6 +7,7 @@ public class MusicHub {
         Model model = new Model();
         ConsoleView view = new ConsoleView();
         Presenter presenter = new Presenter(model, view);
+        presenter.importColors();
         presenter.DisplayGameMenu();
     }
 }

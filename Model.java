@@ -31,14 +31,18 @@ public class Model {
         try {
             String urlString = "";
             switch (option) {
-                case "artist":
+                case "ArtistExpanded":
                         newArtist.setName(input);
                         urlString ="http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist="
                         + newArtist.getName().replace(" ", "+")
                         + "&api_key=" + API_KEY + "&format=json";
-
                         break;
-
+                case "ArtistBasic":
+                    newArtist.setName(input);
+                    urlString ="http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist="
+                    + newArtist.getName().replace(" ", "+")
+                    + "&api_key=" + API_KEY + "&format=json";
+                    break;
                 case "topSongs":
                         urlString = "http://ws.audioscrobbler.com/2.0/?method=geo.gettoptracks&country=" +input + "&api_key=" + API_KEY + "&format=json";
                         break;

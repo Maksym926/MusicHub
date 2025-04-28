@@ -1,7 +1,7 @@
 package json.Track;
 
 public class TopSongs {
-    String topSongs;
+    String topSongs = "";
 
     public void setTopSongs(String topSongs) {
         this.topSongs = topSongs;

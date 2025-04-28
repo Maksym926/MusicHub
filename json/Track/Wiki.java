@@ -1,8 +1,8 @@
 package json.Track;
 
 public class Wiki {
-    private String publisedDate;
-    private String summary;
+    private String publisedDate = "";
+    private String summary = "";
 
     public String getPublisedDate(){
         return publisedDate;

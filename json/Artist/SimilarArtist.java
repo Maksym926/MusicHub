@@ -1,7 +1,7 @@
 package json.Artist;
 
 public class SimilarArtist {
-    String name;
+    String name = "";
     public String getSimilarArtistName(){
         return  name;
     }

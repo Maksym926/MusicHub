@@ -1,7 +1,7 @@
 package json.Track;
 
 public class TopTags {
-    String tags;
+    String tags = "";
 
     public void setTags(String tags){
         this.tags = tags;

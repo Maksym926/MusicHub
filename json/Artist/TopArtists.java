@@ -1,7 +1,7 @@
 package json.Artist;
 
 public class TopArtists {
-    String topArtists;
+    String topArtists = "";
 
     public void setTopArtists(String topArtists) {
         this.topArtists = topArtists;

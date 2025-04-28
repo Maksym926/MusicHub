@@ -3,11 +3,11 @@ package json.Track;
 
 
 public class Track {
-    private String trackName;
-    private String artistName;
-    private String numberOfListeners;
-    private String playCount;
-    private String duration;
+    private String trackName = "";
+    private String artistName = "";
+    private String numberOfListeners = "";
+    private String playCount = "";
+    private String duration = "";
     private Wiki wiki;
     private TopTags topTags;
     private TopSongs topSongs;
@@ -63,11 +63,11 @@ public class Track {
         return wiki;
     }
 
-    public TopTags getTopTags() {
-        return topTags;
+    public String getTopTags() {
+        return topTags.getTags();
     }
 
-    public TopSongs getTopSongs() {
-        return topSongs;
+    public String getTopSongs() {
+        return topSongs.getTopSongs();
     }
 }

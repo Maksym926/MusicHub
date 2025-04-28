@@ -1,8 +1,8 @@
 package json.Artist;
 
 public class Bio {
-    private String publisedDate;
-    private String summary;
+    private String publisedDate = "";
+    private String summary = "";
 
     public String getPublisedDate(){
         return publisedDate;
